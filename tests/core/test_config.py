@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-import pytest
 
 from launch_engine.config import OnomlyConfig, load_config, save_config
 
@@ -16,8 +15,9 @@ def test_load_config_missing_file(tmp_path: Path):
     assert isinstance(config, OnomlyConfig)
     # Default values from the dataclass definition
     assert config.configured is False
-    # we don't want to assert llm_provider and llm_model explicitly as they default to DEFAULT_MODEL's values which might change
-    # but we can verify it returns a valid config
+    # we don't want to assert llm_provider and llm_model explicitly as they default
+    # to DEFAULT_MODEL's values which might change, but we can verify it returns
+    # a valid config
 
 
 def test_load_config_valid_json(tmp_path: Path):
@@ -26,7 +26,7 @@ def test_load_config_valid_json(tmp_path: Path):
     config_data = {
         "llm_provider": "anthropic",
         "llm_model": "claude-3-5-sonnet-latest",
-        "configured": True
+        "configured": True,
     }
     with open(config_file, "w", encoding="utf-8") as f:
         json.dump(config_data, f)
@@ -53,9 +53,7 @@ def test_load_config_invalid_json(tmp_path: Path):
 def test_load_config_missing_fields(tmp_path: Path):
     """Test loading configuration when some JSON fields are missing."""
     config_file = tmp_path / "config.json"
-    config_data = {
-        "configured": True
-    }
+    config_data = {"configured": True}
     with open(config_file, "w", encoding="utf-8") as f:
         json.dump(config_data, f)
 
@@ -71,11 +69,7 @@ def test_save_config(tmp_path: Path):
     """Test saving configuration to disk."""
     config_file = tmp_path / "subdir" / "config.json"
 
-    config = OnomlyConfig(
-        llm_provider="openai",
-        llm_model="gpt-4o",
-        configured=True
-    )
+    config = OnomlyConfig(llm_provider="openai", llm_model="gpt-4o", configured=True)
 
     saved_path = save_config(config, path=config_file)
 
