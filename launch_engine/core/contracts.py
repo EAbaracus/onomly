@@ -7,13 +7,9 @@ from typing import Protocol
 class BaseModuleInput(BaseModel):
     """Base input for all modules."""
 
-    pass
-
 
 class BaseModuleOutput(BaseModel):
     """Base output for all modules."""
-
-    pass
 
 
 class LaunchModule(Protocol):
