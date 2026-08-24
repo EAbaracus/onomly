@@ -102,6 +102,19 @@ async def test_domain_network_error(domain_adapter):
 
 
 @pytest.mark.asyncio
+async def test_domain_url_encoding(domain_adapter):
+    """Test that domain inputs are correctly URL encoded."""
+    mock_response = unittest.mock.Mock()
+    mock_response.status_code = 404
+
+    with unittest.mock.patch.object(
+        domain_adapter._client, "get", return_value=mock_response
+    ) as mock_get:
+        await domain_adapter.validate("invalid/domain.com")
+        mock_get.assert_called_once_with("https://rdap.org/domain/invalid%2Fdomain.com")
+
+
+@pytest.mark.asyncio
 async def test_domain_empty(domain_adapter):
     """Test empty domain."""
     result = await domain_adapter.validate("")
