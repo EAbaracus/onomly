@@ -1,4 +1,4 @@
-import time
+import asyncio
 import tempfile
 import os
 from datetime import datetime
@@ -123,7 +123,7 @@ async def test_ttl_expiration(db_path: str, sample_validation_result: Validation
         assert result is not None
 
         # Wait for expiration
-        time.sleep(1.1)  # Wait slightly longer than TTL
+        await asyncio.sleep(1.1)  # Wait slightly longer than TTL
 
         # After expiration, get should return None
         result = await cache.get(key)
