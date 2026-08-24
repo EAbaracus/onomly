@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import urllib.parse
 
 import httpx
 
@@ -56,7 +57,8 @@ class SocialMediaAdapter:
         errors = []
 
         for platform_name, url_format in self.PLATFORMS:
-            url = url_format.format(username=username)
+            encoded_username = urllib.parse.quote(username)
+            url = url_format.format(username=encoded_username)
             try:
                 response = await self._client.head(url)
                 if 200 <= response.status_code < 300:  # 2xx
