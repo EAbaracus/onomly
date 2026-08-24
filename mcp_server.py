@@ -79,7 +79,12 @@ async def generate_names(brief_json: str) -> str:
             description, target_markets, industry, optional brand_story_seed,
             preferred_typologies, avoid_terms, phonetic_constraints, name_count).
     """
-    brief = _brief_from_json(json.loads(brief_json))
+    try:
+        brief_data = json.loads(brief_json)
+    except json.JSONDecodeError as e:
+        return json.dumps({"error": f"Invalid JSON provided: {str(e)}"})
+
+    brief = _brief_from_json(brief_data)
     engine = _make_engine()
     result = await engine.generate_names(brief)
     return result.model_dump_json(indent=2)
@@ -94,8 +99,14 @@ async def validate_names(candidates_json: str, brief_json: str) -> str:
             (candidate_id, name, typology).
         brief_json: JSON string of NamingBrief fields.
     """
-    brief = _brief_from_json(json.loads(brief_json))
-    candidates = _candidates_from_json(json.loads(candidates_json))
+    try:
+        brief_data = json.loads(brief_json)
+        candidates_data = json.loads(candidates_json)
+    except json.JSONDecodeError as e:
+        return json.dumps({"error": f"Invalid JSON provided: {str(e)}"})
+
+    brief = _brief_from_json(brief_data)
+    candidates = _candidates_from_json(candidates_data)
     engine = _make_engine()
     results = await engine.validate_names(candidates, brief)
     return json.dumps([r.model_dump() for r in results], default=str, indent=2)
@@ -108,7 +119,12 @@ async def run_full_pipeline(brief_json: str) -> str:
     Args:
         brief_json: JSON string of NamingBrief fields.
     """
-    brief = _brief_from_json(json.loads(brief_json))
+    try:
+        brief_data = json.loads(brief_json)
+    except json.JSONDecodeError as e:
+        return json.dumps({"error": f"Invalid JSON provided: {str(e)}"})
+
+    brief = _brief_from_json(brief_data)
     engine = _make_engine()
     candidates, results = await engine.run_full_pipeline(brief)
     payload = {
