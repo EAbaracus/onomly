@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import urllib.parse
 
 import httpx
 
@@ -48,7 +49,8 @@ class DomainAdapter:
         )
 
         # Try to use rdap.org as a proxy RDAP service
-        url = f"https://rdap.org/domain/{domain}"
+        encoded_domain = urllib.parse.quote(domain, safe="")
+        url = f"https://rdap.org/domain/{encoded_domain}"
         try:
             response = await self._client.get(url)
             if response.status_code == 200:
