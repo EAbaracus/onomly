@@ -6,7 +6,6 @@ Falls back to environment variables if already set.
 
 from __future__ import annotations
 
-import json
 import os
 from pathlib import Path
 

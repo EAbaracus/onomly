@@ -6,25 +6,28 @@ import asyncio
 import hashlib
 import json
 import time
-from typing import List, Optional
+from datetime import datetime
 
+from launch_engine.cache import SQLiteCache
+from launch_engine.core.validation import (
+    Confidence,
+    Evidence,
+    ValidationChannel,
+)
+from launch_engine.core.validation import (
+    ValidationResult as CoreValidationResult,
+)
+from launch_engine.core.validation import (
+    ValidationStatus as CoreValidationStatus,
+)
+from launch_engine.modules.naming.brief import NamingBrief
+from launch_engine.modules.naming.candidates import NameCandidate
 from launch_engine.validation.adapters.base import (
     ValidationAdapter,
     ValidationResult,
     ValidationStatus,
 )
 from launch_engine.validation.rate_limiter import RateLimiter
-from launch_engine.cache import SQLiteCache
-from launch_engine.modules.naming.brief import NamingBrief
-from launch_engine.modules.naming.candidates import NameCandidate
-from launch_engine.core.validation import (
-    ValidationResult as CoreValidationResult,
-    ValidationStatus as CoreValidationStatus,
-    ValidationChannel,
-    Confidence,
-    Evidence,
-)
-from datetime import datetime
 
 
 class ValidationPipeline:
@@ -32,7 +35,7 @@ class ValidationPipeline:
 
     def __init__(
         self,
-        adapters: List[ValidationAdapter],
+        adapters: list[ValidationAdapter],
         cache: SQLiteCache,
         max_concurrency: int = 10,
         pipeline_timeout: float = 120.0,
@@ -58,8 +61,8 @@ class ValidationPipeline:
         self._adapter_policy_versions = {}
 
     async def validate_all(
-        self, candidates: List[NameCandidate], brief: NamingBrief
-    ) -> List[CoreValidationResult]:
+        self, candidates: list[NameCandidate], brief: NamingBrief
+    ) -> list[CoreValidationResult]:
         """Validate all candidates using all adapters in parallel.
 
         Args:
@@ -100,7 +103,7 @@ class ValidationPipeline:
                 # This shouldn't happen with return_exceptions=True, but just in case
                 processed_results.append(
                     self._create_unverifiable_result(
-                        None, None, f"Unexpected error: {str(result)}"
+                        None, None, f"Unexpected error: {result!s}"
                     )
                 )
             else:
@@ -209,7 +212,7 @@ class ValidationPipeline:
                 else:
                     # Non-transient error or max retries exceeded
                     return self._create_unverifiable_result(
-                        candidate, adapter, f"Validation failed: {str(e)}"
+                        candidate, adapter, f"Validation failed: {e!s}"
                     )
 
         # Should not reach here, but just in case
@@ -289,10 +292,7 @@ class ValidationPipeline:
         context_hash = self._build_context_hash(brief)
         normalized_target = candidate.name.lower().strip()
 
-        # Fallback for adapters without name attribute in tests
-        adapter_key = getattr(adapter, "name", str(id(adapter)))
-
-        if adapter_key not in self._adapter_policy_versions:
+        if adapter not in self._adapter_policy_versions:
             # Convert policy to dict - handle both Pydantic models and dataclasses
             if hasattr(adapter.policy, "model_dump"):
                 policy_dict = adapter.policy.model_dump()
@@ -300,14 +300,14 @@ class ValidationPipeline:
                 policy_dict = adapter.policy.__dict__
             else:
                 policy_dict = {}
-            self._adapter_policy_versions[adapter_key] = json.dumps(
+            self._adapter_policy_versions[adapter] = json.dumps(
                 policy_dict, sort_keys=True
             )
 
         key_data = {
             "channel": self._get_channel_from_adapter(adapter).value,
             "adapter_version": adapter.version,
-            "policy_version": self._adapter_policy_versions[adapter_key],
+            "policy_version": self._adapter_policy_versions[adapter],
             "normalized_target": normalized_target,
             "context_hash": context_hash,
         }
@@ -441,8 +441,8 @@ class ValidationPipeline:
 
     def _create_unverifiable_result(
         self,
-        candidate: Optional[NameCandidate],
-        adapter: Optional[ValidationAdapter],
+        candidate: NameCandidate | None,
+        adapter: ValidationAdapter | None,
         error_message: str,
     ) -> CoreValidationResult:
         """Create an unverifiable validation result.

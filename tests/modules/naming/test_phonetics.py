@@ -1,7 +1,6 @@
 import unittest
 from launch_engine.modules.naming.phonetics import (
     PhoneticConstraints,
-    PhoneticAssessment,
     check_phonetic_constraints,
     estimate_syllables,
 )

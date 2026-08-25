@@ -43,8 +43,7 @@ target-version = ['py311']
 [tool.ruff]
 line-length = 88
 target-version = "py311"
-select = ["E", "F", "W", "C90"]
-ignore = []
+ignore = ["E501"]
 
 [tool.mypy]
 python_version = "3.11"
