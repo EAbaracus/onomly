@@ -120,7 +120,7 @@ class SQLiteCache:
         # Use INSERT OR REPLACE to handle updates
         await self.db.execute(
             """
-            INSERT OR REPLACE INTO cache 
+            INSERT OR REPLACE INTO cache
             (key, result_json, expires_at, version, context_hash, created_at)
             VALUES (?, ?, ?, ?, ?, ?)
             """,

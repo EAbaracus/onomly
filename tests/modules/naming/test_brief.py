@@ -1,4 +1,3 @@
-import pytest
 from launch_engine.modules.naming.brief import (
     NameTypology,
     PhoneticConstraints,

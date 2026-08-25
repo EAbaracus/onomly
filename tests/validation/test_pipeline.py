@@ -650,7 +650,7 @@ async def test_validate_all_with_exception_in_results(
     original_gather = asyncio.gather
 
     async def mock_gather(*args, **kwargs):
-        results = await original_gather(*args, **kwargs)
+        await original_gather(*args, **kwargs)
         # Inject an exception
         return [Exception("Test exception")]
 

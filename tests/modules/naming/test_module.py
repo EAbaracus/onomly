@@ -15,7 +15,6 @@ from launch_engine.modules.naming.brief import (
 from launch_engine.modules.naming.candidates import (
     NameCandidate,
     NameCandidateList,
-    InternalAssessment,
 )
 from launch_engine.llm import LLMAdapter
 

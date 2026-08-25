@@ -1,14 +1,13 @@
 """Tests for CLI interface."""
 
 import json
-from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 from typer.testing import CliRunner
 
 from launch_engine.cli.main import app
-from launch_engine.modules.naming.brief import NamingBrief, NameTypology
+from launch_engine.modules.naming.brief import NameTypology
 from launch_engine.modules.naming.candidates import (
     NameCandidate,
     NameCandidateList,
