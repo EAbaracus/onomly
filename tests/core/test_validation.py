@@ -136,7 +136,7 @@ def test_model_validation_errors():
 
     # ValidationResult requires target, channel, status, confidence, evidence, validation_id, adapter_version, checked_at
     now = datetime.now(timezone.utc)
-    evidence = Evidence(source="test", checked_at=now)
+    Evidence(source="test", checked_at=now)
     with pytest.raises(ValidationError):
         ValidationResult()  # missing all required
 

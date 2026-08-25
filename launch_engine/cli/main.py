@@ -2,7 +2,6 @@
 
 import asyncio
 import json
-import sys
 from pathlib import Path
 from typing import Optional
 
@@ -11,12 +10,12 @@ from rich.console import Console
 from rich.table import Table
 
 from launch_engine.engine import LaunchEngine
-from launch_engine.modules.naming.brief import NamingBrief, PhoneticConstraints
+from launch_engine.modules.naming.brief import NamingBrief
 from launch_engine.modules.naming.candidates import NameCandidateList
 from launch_engine.core.validation import ValidationResult
 from launch_engine.runtime_config import ensure_9router_env
 from launch_engine import models as model_catalog
-from launch_engine.config import OnomlyConfig, load_config, save_config, config_path
+from launch_engine.config import OnomlyConfig, load_config, save_config
 from launch_engine.models import ModelEntry
 
 ensure_9router_env()

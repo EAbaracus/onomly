@@ -5,19 +5,17 @@ Brand & Naming module - core logic for generating and evaluating brand names.
 from __future__ import annotations
 
 import json
-from typing import List, Optional
+from typing import List
 from datetime import datetime
 
-from pydantic import BaseModel
 
-from launch_engine.core.contracts import BaseModuleInput, BaseModuleOutput, LaunchModule
+from launch_engine.core.contracts import BaseModuleInput, LaunchModule
 from launch_engine.llm import LLMAdapter
 from .brief import NamingBrief, NameTypology
 from .candidates import NameCandidate, NameCandidateList, InternalAssessment
 from .phonetics import (
     check_phonetic_constraints,
     PhoneticConstraints as PhoneticsConstraintsDataclass,
-    estimate_syllables,
 )
 
 

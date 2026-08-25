@@ -20,7 +20,6 @@ import json
 import logging
 import sys
 from dataclasses import asdict
-from typing import Any
 
 # MCP servers communicate over stdio (stdout). LiteLLM and other libs may
 # write logs to stdout and corrupt the JSON-RPC stream. Silence them and

@@ -2,7 +2,6 @@ from enum import Enum
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from launch_engine.core.contracts import BaseModuleInput
-from datetime import datetime
 
 
 class NameTypology(str, Enum):

@@ -1,7 +1,5 @@
 """Integration tests for the full Launch Engine pipeline."""
 
-import asyncio
-import json
 from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
@@ -438,7 +436,7 @@ class TestFullPipelineIntegration:
             patch("launch_engine.engine.LLMAdapter") as mock_llm_class,
             patch("launch_engine.engine.SQLiteCache") as mock_cache_class,
             patch("launch_engine.engine.BrandNamingModule") as mock_bn_class,
-            patch("launch_engine.engine.ValidationPipeline") as mock_vp_class,
+            patch("launch_engine.engine.ValidationPipeline"),
             patch(
                 "launch_engine.validation.adapters.domain.DomainAdapter"
             ) as mock_domain_class,
